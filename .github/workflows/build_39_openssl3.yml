@@ -1,0 +1,23 @@
+name: TestsMSI
+
+on: push
+
+jobs:
+  build:
+    name: 'Windows (x64)'
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+    - run: .\Tools\msi\get_externals.bat
+    - name: Build CPython
+      run: .\Tools\msi\buildrelease.bat -x64
+    - uses: actions/upload-artifact@v2
+      with:
+        name: python-3.9.13-embed-amd64
+        path: .\PCbuild\amd64\en-us\python-3.9.13-embed-amd64.zip
+    - uses: actions/upload-artifact@v2
+      with:
+        name: python-3.9.13-amd64
+        path: .\PCbuild\amd64\en-us\python-3.9.13-amd64.exe
